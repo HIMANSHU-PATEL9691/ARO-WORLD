@@ -192,7 +192,7 @@ const ProductDetail = () => {
                 size="lg"
                 asChild
               >
-                <Link to="#contact">
+                <Link to="/contact">
                   <Phone className="h-4 w-4" />
                   Inquire Now
                 </Link>

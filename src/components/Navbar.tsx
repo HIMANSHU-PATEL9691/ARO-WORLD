@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { Search, Menu, X, User, Phone } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -14,7 +14,6 @@ const navLinks = [
 
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const location = useLocation();
 
   return (
     <header className="sticky top-0 z-50 bg-card/95 backdrop-blur-md border-b">
@@ -26,67 +25,74 @@ const Navbar = () => {
 
         <nav className="hidden md:flex items-center gap-6">
           {navLinks.map((link) => (
-            <Link
+            <NavLink
               key={link.label}
               to={link.to}
-              className={`text-sm font-medium transition-colors hover:text-primary ${
-                location.pathname === link.to ? "text-primary" : "text-muted-foreground"
-              }`}
+              className={({ isActive }) =>
+                `text-sm font-medium transition-colors hover:text-primary ${isActive ? "text-primary" : "text-muted-foreground"}`
+              }
             >
               {link.label}
-            </Link>
+            </NavLink>
           ))}
         </nav>
 
-        <div className="flex items-center gap-3">
-          <Link to="/products" className="p-2 rounded-lg hover:bg-secondary transition-colors">
-            <Search className="h-5 w-5 text-muted-foreground" />
+        <div className="flex items-center gap-2">
+          <button className="p-3 rounded-xl bg-muted hover:bg-primary/10 transition-all group">
+            <Search className="h-5 w-5 text-muted-foreground group-hover:text-primary" />
+            <span className="sr-only">Search</span>
+          </button>
+          <Link to="/contact" className="p-3 rounded-xl bg-muted hover:bg-primary/10 transition-all group">
+            <Phone className="h-5 w-5 text-muted-foreground group-hover:text-primary" />
+            <span className="sr-only">Contact</span>
           </Link>
-          <Link to="/contact" className="p-2 rounded-lg hover:bg-secondary transition-colors">
-            <Phone className="h-5 w-5 text-muted-foreground" />
-          </Link>
-          <button className="p-2 rounded-lg hover:bg-secondary transition-colors hidden md:flex">
-            <User className="h-5 w-5 text-muted-foreground" />
+          <button className="p-3 rounded-xl bg-muted hover:bg-primary/10 transition-all group hidden lg:flex">
+            <User className="h-5 w-5 text-muted-foreground group-hover:text-primary" />
+            <span className="sr-only">Account</span>
           </button>
           <button
-            className="p-2 rounded-lg hover:bg-secondary transition-colors md:hidden"
+            className="p-3 rounded-xl bg-muted hover:bg-primary/10 transition-all md:hidden group"
             onClick={() => setMobileOpen(!mobileOpen)}
           >
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            <span className="sr-only">Menu</span>
           </button>
         </div>
       </div>
 
       <AnimatePresence>
         {mobileOpen && (
-          <div className="md:hidden fixed inset-0 z-40 bg-black/50" onClick={() => setMobileOpen(false)}>
+          <div className="fixed inset-0 z-50 md:hidden bg-black/50" onClick={() => setMobileOpen(false)}>
             <motion.div
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
-              transition={{ type: 'spring', bounce: 0 }}
-              className="absolute right-0 top-0 h-full w-80 bg-card border-l shadow-2xl"
+              className="absolute right-0 top-0 h-dvh w-80 bg-background border-l shadow-2xl backdrop-blur-md"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="p-4 border-b flex items-center justify-between">
-                <Link to="/" className="flex items-center gap-2 font-bold" onClick={() => setMobileOpen(false)}>
-                  <img src={arooLogo} alt="ARO World" className="h-8 w-8" />
+              <div className="p-6 border-b flex items-center justify-between">
+                <Link to="/" className="flex items-center gap-3 font-bold text-lg" onClick={() => setMobileOpen(false)}>
+                  <img src={arooLogo} alt="ARO World" className="h-10 w-10" />
                   <span>ARO World</span>
                 </Link>
-                <button onClick={() => setMobileOpen(false)}>
+                <button className="p-2 rounded-lg hover:bg-muted transition-colors" onClick={() => setMobileOpen(false)}>
                   <X className="h-6 w-6" />
                 </button>
               </div>
-              <nav className="flex flex-col p-4 gap-2">
+              <nav className="p-6 space-y-1">
                 {navLinks.map((link) => (
-                  <Link
+                  <NavLink
                     key={link.label}
                     to={link.to}
                     onClick={() => setMobileOpen(false)}
-                    className="text-base font-medium py-3 px-4 rounded-xl hover:bg-secondary transition-colors"
+                    className={({ isActive }) =>
+                      `block py-3 px-4 rounded-xl text-lg font-medium transition-colors ${
+                        isActive ? "bg-muted text-primary" : "hover:bg-muted"
+                      }`
+                    }
                   >
                     {link.label}
-                  </Link>
+                  </NavLink>
                 ))}
               </nav>
             </motion.div>
