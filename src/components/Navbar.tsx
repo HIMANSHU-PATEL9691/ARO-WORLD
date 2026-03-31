@@ -59,25 +59,38 @@ const Navbar = () => {
 
       <AnimatePresence>
         {mobileOpen && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            className="md:hidden border-t bg-card overflow-hidden"
-          >
-            <nav className="flex flex-col p-4 gap-3">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.label}
-                  to={link.to}
-                  onClick={() => setMobileOpen(false)}
-                  className="text-sm font-medium py-2 px-3 rounded-lg hover:bg-secondary transition-colors"
-                >
-                  {link.label}
+          <div className="md:hidden fixed inset-0 z-40 bg-black/50" onClick={() => setMobileOpen(false)}>
+            <motion.div
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', bounce: 0 }}
+              className="absolute right-0 top-0 h-full w-80 bg-card border-l shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="p-4 border-b flex items-center justify-between">
+                <Link to="/" className="flex items-center gap-2 font-bold" onClick={() => setMobileOpen(false)}>
+                  <img src={arooLogo} alt="ARO World" className="h-8 w-8" />
+                  <span>ARO World</span>
                 </Link>
-              ))}
-            </nav>
-          </motion.div>
+                <button onClick={() => setMobileOpen(false)}>
+                  <X className="h-6 w-6" />
+                </button>
+              </div>
+              <nav className="flex flex-col p-4 gap-2">
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.label}
+                    to={link.to}
+                    onClick={() => setMobileOpen(false)}
+                    className="text-base font-medium py-3 px-4 rounded-xl hover:bg-secondary transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </nav>
+            </motion.div>
+          </div>
         )}
       </AnimatePresence>
     </header>
